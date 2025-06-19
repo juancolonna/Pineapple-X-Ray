@@ -8,6 +8,18 @@ import io
 import sys
 import random
 import time
+import tensorflow as tf
+
+# 1. Defina funções nomeadas para substituir lambdas
+@tf.keras.utils.register_keras_serializable()
+def reduce_mean_spatial(x):
+    return tf.reduce_mean(x, axis=-1, keepdims=True)
+
+@tf.keras.utils.register_keras_serializable()
+def reduce_max_spatial(x):
+    return tf.reduce_max(x, axis=-1, keepdims=True)
+
+tf.keras.config.enable_unsafe_deserialization()
 
 # --- Configuration and Constants ---
 st.set_page_config(layout="wide")
@@ -15,9 +27,16 @@ st.set_page_config(layout="wide")
 IMG_HEIGHT = 224
 IMG_WIDTH = int(1.1 * IMG_HEIGHT)
 NUM_FEATURES_LIME = 5
-MODEL_PATH = 'Models/multilabel.keras'
 NUM_SAMPLES_LIME = 1000
 LIME_RANDOM_STATE = 42  # for reproducibility
+
+MODEL_PATH = 'Models/best.keras'
+# MODEL_PATH = 'Models/MULTILABEL_model_2025-06-14_20-44-02.keras'
+# MODEL_PATH = 'Models/MULTILABEL_model_2025-06-14_22-09-33.keras'
+# MODEL_PATH = 'Models/MULTILABEL_model_2025-06-15_14-42-39.keras' # oversampling
+
+TRANS_THRESHOLD = 0.57
+BROWN_THRESHOLD = 0.47
 
 @st.cache_resource
 def load_keras_model(path):
@@ -74,7 +93,7 @@ def main():
 
     model = load_keras_model(MODEL_PATH)
     if model is None:
-        st.warning("Please add the 'best.keras' model to the 'Models' folder and refresh.")
+        st.warning("Please add the keras model to the 'Models' folder and refresh.")
         return
 
     st.sidebar.header("⚙️ Controls")
@@ -101,7 +120,6 @@ def main():
 
     col1, col2 = st.columns([0.5, 0.5])
     image_bytes = uploaded_file.getvalue()
-    original_pil_image = Image.open(io.BytesIO(image_bytes))
     image_array_norm, image_for_prediction = preprocess_image(image_bytes)
 
     with col1:
@@ -119,9 +137,11 @@ def main():
             prob_translucency = preds[0][0]
             mcol1, mcol2 = st.columns(2)
             with mcol1:
-                st.metric(label="Translucency Probability", value=f"{prob_translucency:.2%}")
+                st.metric(label="Translucency (Confidence)", 
+                          value=f"{'yes' if prob_translucency > TRANS_THRESHOLD else 'no'} ({prob_translucency:.2%})")
             with mcol2:
-                st.metric(label="Browning Probability", value=f"{prob_browning:.2%}")
+                st.metric(label="Browning (Confidence)", 
+                          value=f"{'yes' if prob_browning > BROWN_THRESHOLD else 'no'} ({prob_browning:.2%})")
 
         if run_lime:
             st.subheader("🔬 LIME Explanations")
