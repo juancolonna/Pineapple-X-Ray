@@ -13,13 +13,16 @@ from PIL import Image
 # and optionally saves results in CSV format or applies explainable AI techniques.
 
 img_height  = 224 # height of the image
-img_width   = int(1.3*img_height)
+img_width   = int(1.1*img_height)
 
 num_features=5
 
+MODEL_PATH = 'Models/best.keras'
+# MODEL_PATH = 'Models/MULTILABEL_model_2025-06-20_15-33-08.keras'
+
 def main(folder: str, csv: bool = False, lime: bool = False):
     # Load the pre-trained model
-    model_path = 'Models/best.keras'  # Update with your model path
+    model_path = MODEL_PATH  # Update with your model path
     if not os.path.exists(model_path):
         print(f"\nModel file '{model_path}' does not exist.\n")
         return
