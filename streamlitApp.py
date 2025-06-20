@@ -11,15 +11,15 @@ import time
 import tensorflow as tf
 
 # 1. Defina funções nomeadas para substituir lambdas
-@tf.keras.utils.register_keras_serializable()
-def reduce_mean_spatial(x):
-    return tf.reduce_mean(x, axis=-1, keepdims=True)
+# @tf.keras.utils.register_keras_serializable()
+# def reduce_mean_spatial(x):
+#     return tf.reduce_mean(x, axis=-1, keepdims=True)
 
-@tf.keras.utils.register_keras_serializable()
-def reduce_max_spatial(x):
-    return tf.reduce_max(x, axis=-1, keepdims=True)
+# @tf.keras.utils.register_keras_serializable()
+# def reduce_max_spatial(x):
+#     return tf.reduce_max(x, axis=-1, keepdims=True)
 
-tf.keras.config.enable_unsafe_deserialization()
+# tf.keras.config.enable_unsafe_deserialization()
 
 # --- Configuration and Constants ---
 st.set_page_config(layout="wide")
@@ -31,12 +31,12 @@ NUM_SAMPLES_LIME = 1000
 LIME_RANDOM_STATE = 42  # for reproducibility
 
 MODEL_PATH = 'Models/best.keras'
-# MODEL_PATH = 'Models/MULTILABEL_model_2025-06-14_20-44-02.keras'
-# MODEL_PATH = 'Models/MULTILABEL_model_2025-06-14_22-09-33.keras'
-# MODEL_PATH = 'Models/MULTILABEL_model_2025-06-15_14-42-39.keras' # oversampling
-
 TRANS_THRESHOLD = 0.57
 BROWN_THRESHOLD = 0.47
+
+# MODEL_PATH = 'Models/MULTILABEL_model_2025-06-20_15-33-08.keras'
+# TRANS_THRESHOLD = 0.73
+# BROWN_THRESHOLD = 0.44
 
 @st.cache_resource
 def load_keras_model(path):
