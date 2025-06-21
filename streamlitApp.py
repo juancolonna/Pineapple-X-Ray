@@ -25,18 +25,19 @@ import tensorflow as tf
 st.set_page_config(layout="wide")
 
 IMG_HEIGHT = 224
-IMG_WIDTH = int(1.1 * IMG_HEIGHT)
+IMG_WIDTH = IMG_HEIGHT
+# IMG_WIDTH = int(1.1 * IMG_HEIGHT)
 NUM_FEATURES_LIME = 5
 NUM_SAMPLES_LIME = 1000
 LIME_RANDOM_STATE = 42  # for reproducibility
 
-MODEL_PATH = 'Models/best.keras'
-TRANS_THRESHOLD = 0.57
-BROWN_THRESHOLD = 0.47
-
 # MODEL_PATH = 'Models/MULTILABEL_model_2025-06-20_15-33-08.keras'
 # TRANS_THRESHOLD = 0.73
 # BROWN_THRESHOLD = 0.44
+
+MODEL_PATH = 'Models/MULTILABEL_AE_2025-06-21_17-20-06.keras'
+TRANS_THRESHOLD = 0.56
+BROWN_THRESHOLD = 0.53
 
 @st.cache_resource
 def load_keras_model(path):
