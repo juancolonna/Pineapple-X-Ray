@@ -56,7 +56,7 @@ def get_lime_explainer():
 
 def preprocess_image(image_bytes):
     img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
-    img_resized = img.resize((IMG_WIDTH, IMG_HEIGHT))
+    img_resized = img.resize((IMG_HEIGHT,IMG_WIDTH))
     img_array = np.array(img_resized) / 255.0
     return img_array, np.expand_dims(img_array, axis=0)
 
